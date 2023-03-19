@@ -8,8 +8,8 @@ tmp/
 *.DS_Store
 
 # bazel files
-bazel-ThruAudioXfer/
-bazel-bin/
-bazel-out/
-bazel-testlogs/
+/bazel-ThruAudioXfer
+/bazel-bin
+/bazel-out
+/bazel-testlogs
 
