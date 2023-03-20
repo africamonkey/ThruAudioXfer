@@ -1,3 +1,4 @@
+#include <cmath>
 #include <iostream>
 #include <fstream>
 
@@ -20,8 +21,12 @@ int main() {
   // Write the WAV data to the file
   const int sample_count = 44100 * 5; // 5 seconds of audio
   short sample;
+  const double frequency = 440.00;  // in Hz.
   for (int i = 0; i < sample_count; i++) {
-    sample = (i % 200) - 100; // Generate a sine wave
+    const double t = 1.0 * i / wav_header.sample_rate;
+    const double sample_d = std::sin(t * 2.0 * std::acos(-1.0) * frequency);
+    const double volume = 0.2;
+    const short sample = volume * sample_d * std::numeric_limits<short>::max();
     outfile.write((char*)&sample, sizeof(sample));
   }
 
