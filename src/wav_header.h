@@ -1,5 +1,7 @@
 #include <cstring>
 
+namespace wav {
+
 struct WavHeader {
   // RIFF Header
   char riff_header[4];  // Contains "RIFF"
@@ -91,3 +93,5 @@ class WavHeaderBuilder {
  private:
   WavHeader wav_header_;
 };
+
+}  // namespace wav

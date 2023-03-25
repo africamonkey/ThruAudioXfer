@@ -2,6 +2,7 @@ tmp/
 .git/
 .vscode/
 .idea/
+.clwb/
 *.pyc
 *.sw[a-p]
 *~

@@ -1,50 +1,22 @@
 #include <cmath>
-#include <iostream>
-#include <fstream>
 
-#include "src/wav_header.h"
-
-#include "glog/logging.h"
+#include "src/wav_io.h"
 
 int main() {
-  // Open the output file for writing in binary mode
-  std::ofstream outfile("tmp/output.wav", std::ios::binary);
-
-  WavHeader wav_header = WavHeaderBuilder()
-                             .fmt_chunk_size(16)
-                             .audio_format(1)
-                             .num_channels(1)
-                             .sample_rate(44100)
-                             .bit_depth(16)
-                             .wav_header();
-  // Write the WAV file header to the file
-  outfile.write((char*)&wav_header, sizeof(wav_header));
-
-  // Write the WAV data to the file
-  const int sample_count = 44100 * 5; // 5 seconds of audio
-  short sample;
-  const double frequency = 440.00;  // in Hz.
-  CHECK_LT(frequency, wav_header.sample_rate);
-  for (int i = 0; i < sample_count; i++) {
-    const double t = 1.0 * i / wav_header.sample_rate;
-    const double sample_d = std::sin(t * 2.0 * std::acos(-1.0) * frequency);
+  constexpr int kSampleRate = 44100;
+  const int sample_count = kSampleRate * 5; // 5 seconds of audio
+  std::function<double(int)> sample_function = [](int sample_iteration) {
+    if (sample_iteration > sample_count) {
+      return std::numeric_limits<double>::quiet_NaN();
+    }
+    const double frequency = 440.00;  // in Hz.
+    const double t = 1.0 * sample_iteration / kSampleRate;
+    const double sample_d = std::sin(t * 2.0 * M_PI * frequency);
     const double volume = 0.2;
-    const short sample = volume * sample_d * std::numeric_limits<short>::max();
-    outfile.write((char*)&sample, sizeof(sample));
-  }
+    return volume * sample_d;
+  };
 
-  // Close the file
-  outfile.close();
+  wav::WriteToWavFile("tmp/output.wav", kSampleRate, sample_function);
 
-  // Now that we know the size of the data chunk, update the header
-  int data_bytes = sample_count * sizeof(sample);
-  wav_header = WavHeaderBuilder(wav_header).data_bytes(data_bytes).wav_header();
-
-  // Open the file again and overwrite the header
-  outfile.open("output.wav", std::ios::binary | std::ios::in | std::ios::out);
-  outfile.seekp(0);
-  outfile.write((char*)&wav_header, sizeof(wav_header));
-
-  // Close the file again
-  outfile.close();
+  return 0;
 }
