@@ -8,6 +8,7 @@ cc_binary(
     ],
     deps = [
         "//src/common/file:io",
+        "//src/common/math:math_utils",
         "//src/wav:wav_io",
         "@com_google_glog//:glog",
     ],

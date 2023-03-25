@@ -1,3 +1,5 @@
+#pragma once
+
 #include <functional>
 
 #include "src/common/interface/proto/wav_params.pb.h"
