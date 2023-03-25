@@ -1,0 +1,5 @@
+package interface;
+
+message WavParams {
+  optional int32 sample_rate = 1;
+}

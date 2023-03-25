@@ -1,4 +1,5 @@
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 
 def third_party_repositories():
     http_archive(
@@ -16,15 +17,28 @@ def third_party_repositories():
     )
 
     http_archive(
-        name = "com_google_protobuf",
-        sha256 = "73fdad358857e120fd0fa19e071a96e15c0f23bb25f85d3f7009abfd4f264a2a",
-        strip_prefix = "protobuf-3.6.1.3",
-        urls = ["https://github.com/protocolbuffers/protobuf/archive/v3.6.1.3.tar.gz"],
-    )
-
-    http_archive(
         name = "com_google_glog",
         sha256 = "8a83bf982f37bb70825df71a9709fa90ea9f4447fb3c099e1d720a439d88bad6",
         strip_prefix = "glog-0.6.0",
         urls = ["https://github.com/google/glog/archive/v0.6.0.tar.gz"],
+    )
+
+    # rules_cc defines rules for generating C++ code from Protocol Buffers.
+    http_archive(
+        name = "rules_cc",
+        urls = [
+            "https://github.com/bazelbuild/rules_cc/releases/download/0.0.6/rules_cc-0.0.6.tar.gz",
+        ],
+        sha256 = "3d9e271e2876ba42e114c9b9bc51454e379cbf0ec9ef9d40e2ae4cec61a31b40",
+        strip_prefix = "rules_cc-0.0.6",
+    )
+
+    # rules_proto defines abstract rules for building Protocol Buffers.
+    http_archive(
+        name = "rules_proto",
+        sha256 = "dc3fb206a2cb3441b485eb1e423165b231235a1ea9b031b4433cf7bc1fa460dd",
+        strip_prefix = "rules_proto-5.3.0-21.7",
+        urls = [
+            "https://github.com/bazelbuild/rules_proto/archive/refs/tags/5.3.0-21.7.tar.gz",
+        ],
     )

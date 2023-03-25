@@ -1,6 +1,6 @@
 #include <numeric>
 
-#include "glog/logging.h"
+#include "external/com_google_glog/_virtual_includes/glog/glog/logging.h"
 
 namespace math {
 

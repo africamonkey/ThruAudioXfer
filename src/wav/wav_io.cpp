@@ -4,7 +4,7 @@
 #include <iostream>
 #include <fstream>
 
-#include "src/common/math_utils.h"
+#include "src/common/math/math_utils.h"
 #include "src/wav/wav_header.h"
 
 #include "glog/logging.h"
@@ -13,11 +13,11 @@ namespace wav {
 
 // Sample rate: samples per second.
 // Sample function: maps from sample iteration to sample data. Sample data should be in [-1, 1].
-void WriteToWavFile(const char* filename,
-                    int sample_rate,
+void WriteToWavFile(const std::string& filename,
+                    const interface::WavParams& wav_params,
                     std::function<double(int)> sample_function) {
   // Open the output file for writing in binary mode
-  std::ofstream outfile(filename, std::ios::binary);
+  std::ofstream outfile(filename.data(), std::ios::binary);
   WavHeader wav_header = WavHeaderBuilder()
       .fmt_chunk_size(16)
       .audio_format(1)
@@ -50,7 +50,7 @@ void WriteToWavFile(const char* filename,
   wav_header = wav::WavHeaderBuilder(wav_header).data_bytes(data_bytes).wav_header();
 
   // Open the file again and overwrite the header
-  outfile.open(filename, std::ios::binary | std::ios::in | std::ios::out);
+  outfile.open(filename.data(), std::ios::binary | std::ios::in | std::ios::out);
   outfile.seekp(0);
   outfile.write((char*)&wav_header, sizeof(wav_header));
 

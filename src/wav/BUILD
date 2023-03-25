@@ -11,6 +11,7 @@ cc_library(
     hdrs = ["wav_io.h"],
     deps = [
         ":wav_header",
-        "//src/common:math_utils",
+        "//src/common/interface/proto:cc_wav_params_proto",
+        "//src/common/math:math_utils",
     ],
 )
