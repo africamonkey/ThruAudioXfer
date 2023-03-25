@@ -4,6 +4,8 @@
 
 #include "src/wav_header.h"
 
+#include "glog/logging.h"
+
 int main() {
   // Open the output file for writing in binary mode
   std::ofstream outfile("tmp/output.wav", std::ios::binary);
@@ -22,6 +24,7 @@ int main() {
   const int sample_count = 44100 * 5; // 5 seconds of audio
   short sample;
   const double frequency = 440.00;  // in Hz.
+  CHECK_LT(frequency, wav_header.sample_rate);
   for (int i = 0; i < sample_count; i++) {
     const double t = 1.0 * i / wav_header.sample_rate;
     const double sample_d = std::sin(t * 2.0 * std::acos(-1.0) * frequency);

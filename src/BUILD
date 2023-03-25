@@ -10,6 +10,7 @@ cc_binary(
     srcs = ["demo.cpp"],
     deps = [
         ":wav_header",
+        "@com_google_glog//:glog",
     ],
 )
 

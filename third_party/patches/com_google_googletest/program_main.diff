@@ -1,0 +1,70 @@
+--- BUILD.bazel
++++ BUILD.bazel
+@@ -103,13 +103,16 @@ cc_library(
+             "@com_google_absl//absl/types:variant",
+         ],
+         "//conditions:default": [],
+-    }),
++    }) + ["@org_llvm_libcxxabi//:libcxxabi"],
+ )
+ 
+ cc_library(
+     name = "gtest_main",
+     srcs = ["googlemock/src/gmock_main.cc"],
+-    deps = [":gtest"],
++    deps = [
++        ":gtest",
++        "@org_cloudabi_argdata//:argdata",
++    ],
+ )
+ 
+ # The following rules build samples of how to use gTest.
+--- googlemock/src/gmock_main.cc
++++ googlemock/src/gmock_main.cc
+@@ -28,6 +28,40 @@
+ // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ 
+ 
++#ifdef __CloudABI__
++
++#include <argdata.hpp>
++#include <cstdlib>
++#include <program.h>
++#include <stdio.h>
++
++#include "gmock/gmock.h"
++#include "gtest/gtest.h"
++
++void program_main(const argdata_t *ad) {
++  // Fetch configuration attributes from argument data.
++  std::optional<int> logfile;
++  for (auto [key, value] : ad->as_map()) {
++    if (key->as_str() == "logfile")
++      logfile = value->get_fd();
++  }
++
++  // Set up stderr.
++  if (logfile) {
++    FILE *f = fdopen(*logfile, "w");
++    if (f != NULL)
++      fswap(stderr, f);
++  }
++
++  // Call into regular initialization.
++  int argc = 1;
++  char *argv[] = {const_cast<char *>("test"), nullptr};
++  testing::InitGoogleMock(&argc, argv);
++  std::exit(RUN_ALL_TESTS());
++}
++
++#else
++
+ #include <iostream>
+ #include "gmock/gmock.h"
+ #include "gtest/gtest.h"
+@@ -69,3 +111,5 @@ GTEST_API_ int main(int argc, char** argv) {
+   return RUN_ALL_TESTS();
+ }
+ #endif
++
++#endif
