@@ -8,6 +8,6 @@ namespace wav {
 // Sample function: maps from sample iteration to sample data. Sample data should be in [0, 1].
 void WriteToWavFile(const std::string& filename,
                     const interface::WavParams& wav_params,
-                    std::function<double(int)> sample_function);
+                    const std::function<double(int)>& sample_function);
 
 }  // namespace wav

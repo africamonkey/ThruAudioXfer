@@ -15,7 +15,7 @@ namespace wav {
 // Sample function: maps from sample iteration to sample data. Sample data should be in [-1, 1].
 void WriteToWavFile(const std::string& filename,
                     const interface::WavParams& wav_params,
-                    std::function<double(int)> sample_function) {
+                    const std::function<double(int)>& sample_function) {
   // Open the output file for writing in binary mode
   std::ofstream outfile(filename.data(), std::ios::binary);
   WavHeader wav_header = WavHeaderBuilder()
