@@ -1,11 +1,11 @@
-#include "src/wav_io.h"
+#include "src/wav/wav_io.h"
 
 #include <cmath>
 #include <iostream>
 #include <fstream>
 
-#include "src/math_utils.h"
-#include "src/wav_header.h"
+#include "src/common/math_utils.h"
+#include "src/wav/wav_header.h"
 
 #include "glog/logging.h"
 

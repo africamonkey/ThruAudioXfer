@@ -1,10 +1,9 @@
 package(default_visibility = ["//visibility:public"])
 
-cc_binary(
-    name = "demo",
-    srcs = ["demo.cpp"],
+cc_library(
+    name = "math_utils",
+    hdrs = ["math_utils.h"],
     deps = [
-        "//src/wav:wav_io",
         "@com_google_glog//:glog",
     ],
 )

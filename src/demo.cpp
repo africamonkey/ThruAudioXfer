@@ -1,6 +1,6 @@
 #include <cmath>
 
-#include "src/wav_io.h"
+#include "src/wav/wav_io.h"
 
 int main() {
   constexpr int kSampleRate = 44100;
