@@ -11,9 +11,9 @@ def third_party_repositories():
 
     http_archive(
         name = "com_google_googletest",
-        sha256 = "99dddcd1a17c786a06bb9a8da55bfa51f08aa146c877c3643d80a36047c715c7",
-        strip_prefix = "googletest-0599a7b8410dc5cfdb477900b280475ae775d7f9",
-        urls = ["https://github.com/google/googletest/archive/0599a7b8410dc5cfdb477900b280475ae775d7f9.tar.gz"],
+        sha256 = "ad7fdba11ea011c1d925b3289cf4af2c66a352e18d4c7264392fead75e919363",
+        strip_prefix = "googletest-1.13.0",
+        urls = ["https://github.com/google/googletest/archive/refs/tags/v1.13.0.tar.gz"],
     )
 
     http_archive(

@@ -1,0 +1,8 @@
+package interface;
+
+message IoTest {
+  optional int32 test_int = 1;
+  optional double test_double = 2;
+  optional string test_string = 3;
+  repeated double test_repeated_double = 4;
+}

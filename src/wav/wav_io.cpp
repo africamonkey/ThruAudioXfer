@@ -22,7 +22,7 @@ void WriteToWavFile(const std::string& filename,
       .fmt_chunk_size(16)
       .audio_format(1)
       .num_channels(1)
-      .sample_rate(sample_rate)
+      .sample_rate(wav_params.sample_rate())
       .bit_depth(16)
       .wav_header();
   // Write the WAV file header to the file
