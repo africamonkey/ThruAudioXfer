@@ -19,8 +19,7 @@ TEST(WavIoTest, GenerateConstantFrequencyWav) {
   for (int i = 0; i < sample_count; ++i) {
     const double t = 1.0 * i / wav_params.sample_rate();
     const double sample_d = std::sin(t * 2.0 * M_PI * frequency);
-    const double volume = 0.2;
-    wav_writer.AddSample(volume * sample_d);
+    wav_writer.AddSample(sample_d);
   }
   wav_writer.Write();
   io::DeleteFileIfExists(temp_filename);
@@ -69,8 +68,71 @@ TEST(WavIoTest, GenerateScale) {
     for (int i = 0; i < sample_count; ++i) {
       const double t = 1.0 * i / wav_params.sample_rate();
       const double sample_d = std::sin(t * 2.0 * M_PI * note.frequency);
-      const double volume = 0.2;
-      wav_writer.AddSample(volume * sample_d);
+      wav_writer.AddSample(sample_d);
+    }
+  }
+  wav_writer.Write();
+  io::DeleteFileIfExists(temp_filename);
+}
+
+TEST(WavIoTest, GenerateLittleStar) {
+  constexpr double kFrequencyPause = 0.0;
+  constexpr double kFrequencyDo = 261.626;
+  constexpr double kFrequencyRe = 293.665;
+  constexpr double kFrequencyMi = 329.629;
+  constexpr double kFrequencyFa = 349.228;
+  constexpr double kFrequencySo = 391.995;
+  constexpr double kFrequencyLa = 440.000;
+  struct Note {
+    double frequency = 0.0;
+    double duration = 0.0;
+    Note(double frequency, double duration) : frequency(frequency), duration(duration) {}
+  };
+  const std::vector<Note> notes = {
+      Note(kFrequencyDo, 0.20),
+      Note(kFrequencyPause, 0.05),
+      Note(kFrequencyDo, 0.20),
+      Note(kFrequencyPause, 0.05),
+      Note(kFrequencySo, 0.20),
+      Note(kFrequencyPause, 0.05),
+      Note(kFrequencySo, 0.20),
+      Note(kFrequencyPause, 0.05),
+      Note(kFrequencyLa, 0.20),
+      Note(kFrequencyPause, 0.05),
+      Note(kFrequencyLa, 0.20),
+      Note(kFrequencyPause, 0.05),
+      Note(kFrequencySo, 0.20),
+      Note(kFrequencyPause, 0.05),
+      Note(kFrequencyPause, 0.20),
+      Note(kFrequencyPause, 0.05),
+      Note(kFrequencyFa, 0.20),
+      Note(kFrequencyPause, 0.05),
+      Note(kFrequencyFa, 0.20),
+      Note(kFrequencyPause, 0.05),
+      Note(kFrequencyMi, 0.20),
+      Note(kFrequencyPause, 0.05),
+      Note(kFrequencyMi, 0.20),
+      Note(kFrequencyPause, 0.05),
+      Note(kFrequencyRe, 0.20),
+      Note(kFrequencyPause, 0.05),
+      Note(kFrequencyRe, 0.20),
+      Note(kFrequencyPause, 0.05),
+      Note(kFrequencyDo, 0.20),
+      Note(kFrequencyPause, 0.05),
+      Note(kFrequencyPause, 0.20),
+      Note(kFrequencyPause, 0.05),
+      Note(kFrequencyPause, 2.0),
+  };
+  const std::string temp_filename = "/tmp/little_star.wav";
+  interface::WavParams wav_params;
+  ASSERT_TRUE(io::ReadFromProtoInTextFormat("params/wav_params.txt", &wav_params));
+  WavWriter wav_writer(temp_filename, wav_params);
+  for (const auto& note : notes) {
+    int sample_count = static_cast<int>(std::floor(note.duration * wav_params.sample_rate()));
+    for (int i = 0; i < sample_count; ++i) {
+      const double t = 1.0 * i / wav_params.sample_rate();
+      const double sample_d = std::sin(t * 2.0 * M_PI * note.frequency);
+      wav_writer.AddSample(sample_d);
     }
   }
   wav_writer.Write();
