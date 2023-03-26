@@ -2,6 +2,7 @@ syntax = "proto2";
 
 package interface;
 
+// Next id: 5
 message IoTest {
   optional int32 test_int = 1;
   optional double test_double = 2;

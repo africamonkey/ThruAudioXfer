@@ -2,6 +2,8 @@
 
 #include <cstring>
 
+#include "glog/logging.h"
+
 namespace wav {
 
 struct WavHeader {
@@ -50,33 +52,35 @@ class WavHeaderBuilder {
   }
   ~WavHeaderBuilder() = default;
 
-  const WavHeader& wav_header() {
+  const WavHeader &wav_header() {
     return wav_header_;
   }
-  WavHeaderBuilder& fmt_chunk_size(int fmt_chunk_size) {
+  WavHeaderBuilder &fmt_chunk_size(int fmt_chunk_size) {
     wav_header_.fmt_chunk_size = fmt_chunk_size;
     return *this;
   }
-  WavHeaderBuilder& audio_format(short audio_format) {
+  WavHeaderBuilder &audio_format(short audio_format) {
     wav_header_.audio_format = audio_format;
     return *this;
   }
-  WavHeaderBuilder& num_channels(short num_channels) {
+  WavHeaderBuilder &num_channels(short num_channels) {
     wav_header_.num_channels = num_channels;
     UpdateSampleAlignment();
     return *this;
   }
-  WavHeaderBuilder& sample_rate(int sample_rate) {
+  WavHeaderBuilder &sample_rate(int sample_rate) {
     wav_header_.sample_rate = sample_rate;
     UpdateByteRate();
     return *this;
   }
-  WavHeaderBuilder& bit_depth(short bit_depth) {
+  WavHeaderBuilder &bit_depth(short bit_depth) {
+    CHECK(bit_depth == 16 || bit_depth == 24 || bit_depth == 32)
+            << "bit_depth = " << bit_depth << " should be either 16, 24, or 32.";
     wav_header_.bit_depth = bit_depth;
     UpdateSampleAlignment();
     return *this;
   }
-  WavHeaderBuilder& data_bytes(int data_bytes) {
+  WavHeaderBuilder &data_bytes(int data_bytes) {
     wav_header_.data_bytes = data_bytes;
     UpdateWavSize();
     return *this;

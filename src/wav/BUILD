@@ -3,6 +3,9 @@ package(default_visibility = ["//visibility:public"])
 cc_library(
     name = "wav_header",
     hdrs = ["wav_header.h"],
+    deps = [
+        "@com_google_glog//:glog",
+    ],
 )
 
 cc_library(
