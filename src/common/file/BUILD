@@ -16,6 +16,5 @@ cc_test(
         ":io",
         "//src/common/interface/proto:cc_io_test_proto",
         "//src/common/testing:google_test_main",
-        "@com_google_glog//:glog",
     ],
 )
