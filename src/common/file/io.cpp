@@ -1,5 +1,6 @@
 #include "src/common/file/io.h"
 
+#include <filesystem>
 #include <fstream>
 
 #include "google/protobuf/text_format.h"
