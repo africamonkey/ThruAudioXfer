@@ -1,3 +1,5 @@
+// Copyright (c) 2023. Kaiqi Wang - All Rights Reserved
+
 #include "src/wav/wav_writer.h"
 
 #include <cmath>

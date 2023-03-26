@@ -1,3 +1,5 @@
+// Copyright (c) 2023. Kaiqi Wang - All Rights Reserved
+
 #include <cmath>
 
 #include "glog/logging.h"

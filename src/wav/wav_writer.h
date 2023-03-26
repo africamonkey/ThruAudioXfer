@@ -1,3 +1,5 @@
+// Copyright (c) 2023. Kaiqi Wang - All Rights Reserved
+
 #pragma once
 
 #include <fstream>

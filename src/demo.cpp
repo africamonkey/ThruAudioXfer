@@ -1,3 +1,5 @@
+// Copyright (c) 2023. Kaiqi Wang - All Rights Reserved
+
 #include <cmath>
 
 #include "src/common/file/io.h"
