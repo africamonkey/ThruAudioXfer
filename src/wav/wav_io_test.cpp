@@ -1,5 +1,7 @@
 #include "src/wav/wav_io.h"
 
+#include <cmath>
+
 #include "gtest/gtest.h"
 
 #include "src/common/file/io.h"
