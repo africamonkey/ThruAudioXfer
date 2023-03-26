@@ -1,5 +1,6 @@
 #include "src/common/file/io.h"
 
+#include "glog/logging.h"
 #include "gtest/gtest.h"
 
 #include "src/common/interface/proto/io_test.pb.h"
@@ -15,10 +16,10 @@ TEST(IoTest, ReadAndWriteProtoInTextFormat) {
   io_test.set_test_double(test_double);
   io_test.set_test_string(test_string);
   io_test.mutable_test_repeated_double()->Add(test_repeated_double.begin(), test_repeated_double.end());
-  io::WriteToProtoInTextFormat(io_test, temp_filename);
+  CHECK(io::WriteToProtoInTextFormat(io_test, temp_filename));
 
   interface::IoTest io_test_to_read;
-  io::ReadFromProtoInTextFormat(temp_filename, &io_test_to_read);
+  CHECK(io::ReadFromProtoInTextFormat(temp_filename, &io_test_to_read));
   EXPECT_EQ(io_test_to_read.test_int(), test_int);
   EXPECT_EQ(io_test_to_read.test_double(), test_double);
   EXPECT_EQ(io_test_to_read.test_string(), test_string);
