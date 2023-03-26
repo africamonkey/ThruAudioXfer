@@ -1,4 +1,4 @@
-#include <numeric>
+#include <cmath>
 
 #include "glog/logging.h"
 
