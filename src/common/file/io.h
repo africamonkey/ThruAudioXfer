@@ -4,12 +4,18 @@
 
 #include "google/protobuf/message.h"
 
+#ifndef MUST_USE_RESULT
+#define MUST_USE_RESULT __attribute__((warn_unused_result))
+#endif
+
 namespace io {
 
-bool ReadFromProtoInTextFormat(const std::string& text_file,
-                               google::protobuf::Message* proto);
+MUST_USE_RESULT bool ReadFromProtoInTextFormat(const std::string &text_file,
+                                               google::protobuf::Message *proto);
 
-bool WriteToProtoInTextFormat(const google::protobuf::Message& proto,
-                              const std::string& text_file);
+MUST_USE_RESULT bool WriteToProtoInTextFormat(const google::protobuf::Message &proto,
+                                              const std::string &text_file);
 
 }  // namespace io
+
+#undef MUST_USE_RESULT
