@@ -15,3 +15,17 @@ cc_library(
         "//src/common/math:math_utils",
     ],
 )
+
+cc_test(
+    name = "wav_io_test",
+    srcs = ["wav_io_test.cpp"],
+    data = [
+        "//params:wav_params",
+    ],
+    deps = [
+        ":wav_io",
+        "//src/common/file:io",
+        "//src/common/math:math_utils",
+        "//src/common/testing:google_test_main",
+    ],
+)

@@ -26,4 +26,5 @@ TEST(IoTest, ReadAndWriteProtoInTextFormat) {
   for (int i = 0; i < test_repeated_double.size(); ++i) {
     EXPECT_DOUBLE_EQ(io_test_to_read.test_repeated_double(i), test_repeated_double[i]);
   }
+  io::DeleteFileIfExists(temp_filename);
 }

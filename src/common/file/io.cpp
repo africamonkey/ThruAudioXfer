@@ -31,4 +31,10 @@ bool WriteToProtoInTextFormat(const google::protobuf::Message& proto,
   return true;
 }
 
+void DeleteFileIfExists(const std::string& file) {
+  if (std::filesystem::exists(file)) {
+    std::filesystem::remove(file);
+  }
+}
+
 }  // namespace io

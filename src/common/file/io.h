@@ -16,6 +16,8 @@ MUST_USE_RESULT bool ReadFromProtoInTextFormat(const std::string &text_file,
 MUST_USE_RESULT bool WriteToProtoInTextFormat(const google::protobuf::Message &proto,
                                               const std::string &text_file);
 
+void DeleteFileIfExists(const std::string& file);
+
 }  // namespace io
 
 #undef MUST_USE_RESULT
