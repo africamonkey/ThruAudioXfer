@@ -13,7 +13,7 @@ class WavWriter {
   WavWriter(const std::string& filename, const interface::WavParams& wav_params);
   ~WavWriter();
 
-  // Sample data should be in [0, 1].
+  // Sample data should be in [-1, 1].
   void AddSample(double sample);
   void Write();
 
