@@ -1,0 +1,13 @@
+syntax = "proto2";
+
+package interface;
+
+// Next id: 2
+message EncoderParams {
+  optional SimpleSinAmplitudeEncoderParams simple_sin_amplitude_encoder_params = 1;
+}
+
+// Next id: 2
+message SimpleSinAmplitudeEncoderParams {
+  optional double encoder_rate = 1;
+}
