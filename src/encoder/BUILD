@@ -2,7 +2,7 @@ package(default_visibility = ["//visibility:public"])
 
 cc_library(
     name = "encoder_base",
-    srcs = ["encoder_base.cc"],
+    srcs = ["encoder_base.cpp"],
     hdrs = ["encoder_base.h"],
     deps = [
         "//src/common/interface/proto:cc_encoder_params_proto",
