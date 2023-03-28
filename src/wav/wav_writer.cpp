@@ -2,6 +2,7 @@
 
 #include "src/wav/wav_writer.h"
 
+#include <algorithm>
 #include <iostream>
 
 #include "src/common/math/math_utils.h"
@@ -33,7 +34,7 @@ void WavWriter::AddSample(double sample_d) {
   CHECK(!is_finish_writing_) << "Do not add sample after finishing writing.";
   CHECK_GT(sample_d, -1 - math::kEpsilon) << "sample " << sample_d << " is NOT in [-1, 1] range.";
   CHECK_LT(sample_d, 1 + math::kEpsilon) << "sample " << sample_d << " is NOT in [-1, 1] range.";
-  sample_d = math::Clamp(sample_d, -1.0, 1.0);
+  sample_d = std::clamp(sample_d, -1.0, 1.0);
   const auto sample = static_cast<int>(sample_d * (1 << (wav_header_.bit_depth - 1)));
   outfile_.write((char *) &sample, wav_header_.bit_depth / 8);
   ++sample_count_;
