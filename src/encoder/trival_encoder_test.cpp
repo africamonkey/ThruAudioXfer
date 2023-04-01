@@ -19,7 +19,7 @@ TEST(TrivalEncoderTest, EncodeAndDecode) {
   std::vector<double> encoded_double;
   int encode_current_id = 0;
   std::function get_next_byte = [&kStringToBeEncoded, &encode_current_id](char* byte) -> bool {
-    if (encode_current_id >= kStringToBeEncoded.size()) {
+    if (encode_current_id >= (int)kStringToBeEncoded.size()) {
       return false;
     }
     *CHECK_NOTNULL(byte) = kStringToBeEncoded[encode_current_id++];
@@ -34,7 +34,7 @@ TEST(TrivalEncoderTest, EncodeAndDecode) {
   std::string decoded_string;
   int decode_current_id = 0;
   std::function get_next_sample = [&encoded_double, &decode_current_id](double* sample) -> bool {
-    if (decode_current_id >= encoded_double.size()) {
+    if (decode_current_id >= (int)encoded_double.size()) {
       return false;
     }
     *CHECK_NOTNULL(sample) = encoded_double[decode_current_id++];
