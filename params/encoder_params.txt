@@ -1,0 +1,3 @@
+trival_encoder_params: {
+  encoder_rate: 40
+}

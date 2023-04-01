@@ -9,3 +9,27 @@ cc_library(
         "@com_google_glog//:glog",
     ],
 )
+
+cc_library(
+    name = "trival_encoder",
+    srcs = ["trival_encoder.cpp"],
+    hdrs = ["trival_encoder.h"],
+    deps = [
+        ":encoder_base",
+        "@com_google_glog//:glog",
+    ],
+)
+
+cc_test(
+    name = "trival_encoder_test",
+    srcs = ["trival_encoder_test.cpp"],
+    data = [
+        "//params:encoder_params",
+    ],
+    deps = [
+        ":trival_encoder",
+        "//src/common/file:io",
+        "//src/common/testing:google_test_main",
+        "@com_google_glog//:glog",
+    ],
+)

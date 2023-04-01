@@ -6,3 +6,10 @@ filegroup(
         "wav_params.txt",
     ],
 )
+
+filegroup(
+    name = "encoder_params",
+    srcs = [
+        "encoder_params.txt",
+    ],
+)
