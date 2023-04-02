@@ -26,11 +26,14 @@ cc_test(
     srcs = ["trival_encoder_test.cpp"],
     data = [
         "//params:encoder_params",
+        "//params:wav_params",
     ],
     deps = [
         ":trival_encoder",
         "//src/common/file:io",
+        "//src/common/interface/proto:cc_wav_params_proto",
         "//src/common/testing:google_test_main",
+        "//src/wav:wav_writer",
         "@com_google_glog//:glog",
     ],
 )

@@ -7,6 +7,34 @@
 
 #include "src/common/file/io.h"
 #include "src/common/interface/proto/encoder_params.pb.h"
+#include "src/common/interface/proto/wav_params.pb.h"
+#include "src/wav/wav_writer.h"
+
+TEST(TrivalEncoderTest, Encode) {
+  interface::EncoderParams encoder_params;
+  ASSERT_TRUE(io::ReadFromProtoInTextFormat("params/encoder_params.txt", &encoder_params));
+  interface::WavParams wav_params;
+  ASSERT_TRUE(io::ReadFromProtoInTextFormat("params/wav_params.txt", &wav_params));
+  const int audio_sample_rate = wav_params.sample_rate();
+  encoder::TrivalEncoder trival_encoder(audio_sample_rate, std::move(encoder_params));
+  const std::string kStringToBeEncoded = "1f745684946ba0c5ccd19205003c387f637cfc736fe98af5c341c4c02bc54bb7";
+
+  // encode
+  int encode_current_id = 0;
+  std::function get_next_byte = [&kStringToBeEncoded, &encode_current_id](char* byte) -> bool {
+    if (encode_current_id >= (int)kStringToBeEncoded.size()) {
+      return false;
+    }
+    *CHECK_NOTNULL(byte) = kStringToBeEncoded[encode_current_id++];
+    return true;
+  };
+  const std::string temp_filename = "/tmp/trival_encoded.wav";
+  wav::WavWriter wav_writer(temp_filename, wav_params);
+  std::function set_next_sample = [&wav_writer](double sample) {
+    wav_writer.AddSample(sample);
+  };
+  trival_encoder.Encode(get_next_byte, set_next_sample);
+}
 
 TEST(TrivalEncoderTest, EncodeAndDecode) {
   interface::EncoderParams encoder_params;
