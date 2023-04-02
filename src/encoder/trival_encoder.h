@@ -10,14 +10,20 @@ class TrivalEncoder final : EncoderBase {
  public:
   TrivalEncoder(int audio_sample_rate, interface::EncoderParams encoder_params);
 
-  void Encode(const std::function<bool(char*)> &get_next_byte,
+  void Encode(const std::function<bool(char *)> &get_next_byte,
               const std::function<void(double)> &set_next_audio_sample) const override;
 
-  void Decode(const std::function<bool(double*)> &get_next_audio_sample,
+  void Decode(const std::function<bool(double *)> &get_next_audio_sample,
               const std::function<void(char)> &set_next_byte) const override;
 
+  void GetAmplitudeAndStandardError(const std::vector<double> &samples,
+                                    double *amplitude,
+                                    double *std_error) const;
+
  private:
-  double encoder_rate_;
+  double encoder_rate_ = 0.0;
+  double minimum_absolute_amplitude_ = 0.0;
+  double maximum_standard_error_ = 0.0;
 };
 
 } // encoder

@@ -1,3 +1,5 @@
 trival_encoder_params: {
-  encoder_rate: 40
+  encoder_rate: 440
+  minimum_absolute_amplitude: 0.2
+  maximum_standard_error: 0.1
 }

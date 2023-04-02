@@ -16,6 +16,7 @@ cc_library(
     hdrs = ["trival_encoder.h"],
     deps = [
         ":encoder_base",
+        "//src/common/math:math_utils",
         "@com_google_glog//:glog",
     ],
 )
