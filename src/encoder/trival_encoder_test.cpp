@@ -34,6 +34,8 @@ TEST(TrivalEncoderTest, Encode) {
     wav_writer.AddSample(sample);
   };
   trival_encoder.Encode(get_next_byte, set_next_sample);
+  wav_writer.Write();
+  io::DeleteFileIfExists(temp_filename);
 }
 
 TEST(TrivalEncoderTest, EncodeAndDecode) {
