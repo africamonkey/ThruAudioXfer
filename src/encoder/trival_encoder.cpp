@@ -61,10 +61,10 @@ void TrivalEncoder::Decode(const std::function<bool(double *)> &get_next_audio_s
   int current_bit_count = 0;
   while (get_next_audio_sample(&next_sample)) {
     sample_window.push_back(next_sample);
-    while (sample_window.size() > (int)window_size) {
+    while ((int)sample_window.size() > window_size) {
       sample_window.erase(sample_window.begin());
     }
-    if (sample_window.size() != (int)window_size) {
+    if ((int)sample_window.size() != window_size) {
       continue;
     }
     double amplitude = 0.0;
