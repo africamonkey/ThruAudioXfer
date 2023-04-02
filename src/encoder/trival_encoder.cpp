@@ -2,6 +2,8 @@
 
 #include "trival_encoder.h"
 
+#include <cmath>
+
 #include "glog/logging.h"
 #include "src/common/math/math_utils.h"
 
@@ -59,10 +61,10 @@ void TrivalEncoder::Decode(const std::function<bool(double *)> &get_next_audio_s
   int current_bit_count = 0;
   while (get_next_audio_sample(&next_sample)) {
     sample_window.push_back(next_sample);
-    while (sample_window.size() > window_size) {
+    while (sample_window.size() > (int)window_size) {
       sample_window.erase(sample_window.begin());
     }
-    if (sample_window.size() != window_size) {
+    if (sample_window.size() != (int)window_size) {
       continue;
     }
     double amplitude = 0.0;
@@ -102,7 +104,7 @@ void TrivalEncoder::GetAmplitudeAndStandardError(const std::vector<double> &samp
   // min_A 1/n * \Sigma_{i=0}^{n-1} (y_i - A * x_i)^2
   // You can expand it to a quadratic function of A.
   double a = 0, b = 0, c = 0;
-  for (int i = 0; i < samples.size(); ++i) {
+  for (int i = 0; i < (int)samples.size(); ++i) {
     const double x_i = std::sin(M_PI / real_sample_counts * i);
     const double y_i = samples[i];
     a += math::Sqr(x_i);
