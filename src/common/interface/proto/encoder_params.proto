@@ -7,9 +7,11 @@ message EncoderParams {
   optional TrivalEncoderParams trival_encoder_params = 1;
 }
 
-// Next id: 4
+// Next id: 6
 message TrivalEncoderParams {
   optional double encoder_rate = 1;
-  optional double minimum_absolute_amplitude = 2;
-  optional double maximum_standard_error = 3;
+  optional double encode_frequency_for_bit_0 = 2;
+  optional double encode_frequency_for_bit_1 = 3;
+  optional double minimum_absolute_amplitude = 4;
+  optional double maximum_standard_error = 5;
 }
