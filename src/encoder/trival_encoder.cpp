@@ -60,7 +60,7 @@ void TrivalEncoder::Decode(const std::function<bool(double *)> &get_next_audio_s
                            const std::function<void(char)> &set_next_byte) const {
   const int window_size = static_cast<int>(audio_sample_rate_ / encoder_rate_);
   // Find first period.
-  std::vector<double> sample_window;
+  std::deque<double> sample_window;
   double next_sample;
   int last_byte = 0;
   int last_byte_bit_count = 0;
@@ -68,7 +68,7 @@ void TrivalEncoder::Decode(const std::function<bool(double *)> &get_next_audio_s
   while (get_next_audio_sample(&next_sample)) {
     sample_window.push_back(next_sample);
     while ((int) sample_window.size() > window_size) {
-      sample_window.erase(sample_window.begin());
+      sample_window.pop_front();
     }
     if ((int) sample_window.size() != window_size) {
       continue;
@@ -108,20 +108,22 @@ void TrivalEncoder::Decode(const std::function<bool(double *)> &get_next_audio_s
   CHECK_EQ(last_byte_bit_count, 0) << "Decode error: Incomplete data.";
 }
 
-void TrivalEncoder::GetAmplitudeAndStandardError(const std::vector<double> &samples,
+void TrivalEncoder::GetAmplitudeAndStandardError(const std::deque<double> &samples,
                                                  double frequency,
                                                  double *amplitude,
                                                  double *std_error) const {
   *CHECK_NOTNULL(amplitude) = 0;
   *CHECK_NOTNULL(std_error) = 0;
   CHECK(!samples.empty());
-  for (int i = 0; i < (int)samples.size(); ++i) {
+  int i = 0;
+  for (double sample : samples) {
     const double x_i = std::sin(2 * M_PI * frequency * (double) i / audio_sample_rate_);
-    const double y_i = samples[i];
+    const double y_i = sample;
     *amplitude += std::abs(y_i);
     if (x_i * y_i <= math::kEpsilon) {
       *std_error += 1;
     }
+    ++i;
   }
   *amplitude *= M_PI_2 / (int)samples.size();
   *std_error /= (int)samples.size();
