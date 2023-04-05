@@ -18,6 +18,20 @@ cc_library(
     ],
 )
 
+cc_test(
+    name = "wav_reader_test",
+    srcs = ["wav_reader_test.cpp"],
+    data = [
+        "//params:wav_params",
+    ],
+    deps = [
+        ":wav_reader",
+        ":wav_writer",
+        "//src/common/file:io",
+        "//src/common/testing:google_test_main",
+    ],
+)
+
 cc_library(
     name = "wav_writer",
     srcs = ["wav_writer.cpp"],

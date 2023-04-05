@@ -11,7 +11,7 @@
 
 namespace wav {
 
-TEST(WavIoTest, GenerateConstantFrequencyWavSingleChannel) {
+TEST(WavWriterTest, GenerateConstantFrequencyWavSingleChannel) {
   const std::string temp_filename = "/tmp/constant_frequency.wav";
   interface::WavParams wav_params;
   ASSERT_TRUE(io::ReadFromProtoInTextFormat("params/wav_params.txt", &wav_params));
@@ -28,7 +28,7 @@ TEST(WavIoTest, GenerateConstantFrequencyWavSingleChannel) {
   io::DeleteFileIfExists(temp_filename);
 }
 
-TEST(WavIoTest, GenerateConstantFrequencyWavDualChannel) {
+TEST(WavWriterTest, GenerateConstantFrequencyWavDualChannel) {
   const std::string temp_filename = "/tmp/constant_frequency.wav";
   interface::WavParams wav_params;
   ASSERT_TRUE(io::ReadFromProtoInTextFormat("params/wav_params.txt", &wav_params));
@@ -46,7 +46,7 @@ TEST(WavIoTest, GenerateConstantFrequencyWavDualChannel) {
   io::DeleteFileIfExists(temp_filename);
 }
 
-TEST(WavIoTest, GenerateScale) {
+TEST(WavWriterTest, GenerateScale) {
   constexpr double kFrequencyPause = 0.0;
   constexpr double kFrequencyDo = 261.626;
   constexpr double kFrequencyRe = 293.665;
@@ -84,7 +84,7 @@ TEST(WavIoTest, GenerateScale) {
   interface::WavParams wav_params;
   ASSERT_TRUE(io::ReadFromProtoInTextFormat("params/wav_params.txt", &wav_params));
   WavWriter wav_writer(temp_filename, wav_params);
-  for (const auto& note : notes) {
+  for (const auto &note : notes) {
     int sample_count = static_cast<int>(std::floor(note.duration * wav_params.sample_rate()));
     for (int i = 0; i < sample_count; ++i) {
       const double t = 1.0 * i / wav_params.sample_rate();
@@ -96,7 +96,7 @@ TEST(WavIoTest, GenerateScale) {
   io::DeleteFileIfExists(temp_filename);
 }
 
-TEST(WavIoTest, GenerateLittleStar) {
+TEST(WavWriterTest, GenerateLittleStar) {
   constexpr double kFrequencyPause = 0.0;
   constexpr double kFrequencyDo = 261.626;
   constexpr double kFrequencyRe = 293.665;
@@ -148,7 +148,7 @@ TEST(WavIoTest, GenerateLittleStar) {
   interface::WavParams wav_params;
   ASSERT_TRUE(io::ReadFromProtoInTextFormat("params/wav_params.txt", &wav_params));
   WavWriter wav_writer(temp_filename, wav_params);
-  for (const auto& note : notes) {
+  for (const auto &note : notes) {
     int sample_count = static_cast<int>(std::floor(note.duration * wav_params.sample_rate()));
     for (int i = 0; i < sample_count; ++i) {
       const double t = 1.0 * i / wav_params.sample_rate();

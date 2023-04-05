@@ -18,7 +18,7 @@ class WavReader {
   bool IsEof() const;
   // Sample data should be in [-1, 1].
   // Remember to check IsEof() before calling.
-  double GetSample();
+  std::pair<double, double> GetSample();
   WavHeader GetWavHeader() const;
 
  private:
@@ -27,7 +27,7 @@ class WavReader {
   std::string filename_;
   std::ifstream infile_;
   WavHeader wav_header_;
-  size_t num_read_bytes_;
+  int num_read_bytes_;
 };
 
 }  // namespace wav

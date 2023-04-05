@@ -45,7 +45,7 @@ void WavWriter::AddSample(double sample_double) {
   CHECK_GT(sample_double, -1 - math::kEpsilon) << "sample " << sample_double << " is NOT in [-1, 1] range.";
   CHECK_LT(sample_double, 1 + math::kEpsilon) << "sample " << sample_double << " is NOT in [-1, 1] range.";
   sample_double = std::clamp(sample_double, -1.0, 1.0);
-  const auto sample = static_cast<int>(sample_double * ((1 << (wav_header_.bit_depth - 1)) - 1));
+  const auto sample = static_cast<int>(sample_double * (double) ((1ll << (wav_header_.bit_depth - 1)) - 1));
   outfile_.write((char *) &sample, wav_header_.bit_depth / 8);
   ++sample_count_;
 }
@@ -59,8 +59,8 @@ void WavWriter::AddSample(double sample_double_0, double sample_double_1) {
   CHECK_LT(sample_double_1, 1 + math::kEpsilon) << "sample " << sample_double_1 << " is NOT in [-1, 1] range.";
   sample_double_0 = std::clamp(sample_double_0, -1.0, 1.0);
   sample_double_1 = std::clamp(sample_double_1, -1.0, 1.0);
-  const auto sample_0 = static_cast<int>(sample_double_0 * ((1 << (wav_header_.bit_depth - 1)) - 1));
-  const auto sample_1 = static_cast<int>(sample_double_1 * ((1 << (wav_header_.bit_depth - 1)) - 1));
+  const auto sample_0 = static_cast<int>(sample_double_0 * (double) ((1ll << (wav_header_.bit_depth - 1)) - 1));
+  const auto sample_1 = static_cast<int>(sample_double_1 * (double) ((1ll << (wav_header_.bit_depth - 1)) - 1));
   outfile_.write((char *) &sample_0, wav_header_.bit_depth / 8);
   outfile_.write((char *) &sample_1, wav_header_.bit_depth / 8);
   ++sample_count_;
