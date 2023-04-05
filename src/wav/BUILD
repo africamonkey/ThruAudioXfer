@@ -9,6 +9,16 @@ cc_library(
 )
 
 cc_library(
+    name = "wav_reader",
+    srcs = ["wav_reader.cpp"],
+    hdrs = ["wav_reader.h"],
+    deps = [
+        ":wav_header",
+        "@com_google_glog//:glog",
+    ],
+)
+
+cc_library(
     name = "wav_writer",
     srcs = ["wav_writer.cpp"],
     hdrs = ["wav_writer.h"],

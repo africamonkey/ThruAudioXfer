@@ -12,11 +12,12 @@ namespace wav {
 
 class WavWriter {
  public:
-  WavWriter(const std::string& filename, const interface::WavParams& wav_params);
+  WavWriter(std::string filename, const interface::WavParams &wav_params);
   ~WavWriter();
 
   // Sample data should be in [-1, 1].
-  void AddSample(double sample);
+  void AddSample(double sample_double);
+  void AddSample(double sample_double_0, double sample_double_1);
   void Write();
 
  private:

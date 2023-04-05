@@ -66,6 +66,8 @@ class WavHeaderBuilder {
     return *this;
   }
   WavHeaderBuilder &num_channels(short num_channels) {
+    CHECK_GE(num_channels, 1) << "num_channels should be either 1 or 2.";
+    CHECK_LE(num_channels, 2) << "num channels should be either 1 or 2.";
     wav_header_.num_channels = num_channels;
     UpdateSampleAlignment();
     return *this;
