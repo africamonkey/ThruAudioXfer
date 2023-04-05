@@ -44,6 +44,10 @@ void TrivalEncoder::Encode(const std::function<bool(char *)> &get_next_byte,
         double amplitude = std::sin(2 * M_PI * frequency * (double) sample / audio_sample_rate_);
         set_next_audio_sample(amplitude);
       }
+      ++current_bit_count;
+      for (int sample = 0; sample < delta_count; ++sample) {
+        set_next_audio_sample(0.0);
+      }
     }
   }
   // +1s
@@ -58,7 +62,6 @@ void TrivalEncoder::Decode(const std::function<bool(double *)> &get_next_audio_s
   // Find first period.
   std::vector<double> sample_window;
   double next_sample;
-  double last_std_error = std::numeric_limits<double>::infinity();
   int last_byte = 0;
   int last_byte_bit_count = 0;
   int current_bit_count = 0;
@@ -82,32 +85,24 @@ void TrivalEncoder::Decode(const std::function<bool(double *)> &get_next_audio_s
                                  encode_frequency_for_bit_1_,
                                  &amplitude_for_bit_1,
                                  &std_error_for_bit_1);
+    LOG(ERROR) << amplitude_for_bit_0 << " " << amplitude_for_bit_1 << " " << std_error_for_bit_0 << " " << std_error_for_bit_1 << " " << current_bit_count;
     if (std::max(std::abs(amplitude_for_bit_0), std::abs(amplitude_for_bit_1)) < minimum_absolute_amplitude_) {
       continue;
     }
     if (std::min(std_error_for_bit_0, std_error_for_bit_1) > maximum_standard_error_) {
       continue;
     }
-    if (std::min(std_error_for_bit_0, std_error_for_bit_1) < last_std_error) {
-      last_std_error = std::min(std_error_for_bit_0, std_error_for_bit_1);
-      continue;
-    }
+    LOG(ERROR) << "valid bit";
     last_byte |= (1 << last_byte_bit_count) * static_cast<int>(std_error_for_bit_1 < std_error_for_bit_0);
     ++last_byte_bit_count;
     ++current_bit_count;
     if (last_byte_bit_count == 8) {
       set_next_byte(static_cast<char>(last_byte));
+      LOG(ERROR) << "submit " << static_cast<char>(last_byte);
       last_byte = 0;
       last_byte_bit_count = 0;
-      last_std_error = std::numeric_limits<double>::infinity();
     }
-    // remain at most 1/4 period.
-    const int window_size_of_frequency =
-        static_cast<int>(audio_sample_rate_ / std::max(encode_frequency_for_bit_0_, encode_frequency_for_bit_1_)) / 4;
-    sample_window.erase(sample_window.begin(),
-                        sample_window.begin() + std::clamp((int) sample_window.size() - window_size_of_frequency,
-                                                           0,
-                                                           (int) sample_window.size()));
+    sample_window.clear();
   }
   LOG(INFO) << "Total bit count: " << current_bit_count;
   CHECK_EQ(last_byte_bit_count, 0) << "Decode error: Incomplete data.";
@@ -120,23 +115,16 @@ void TrivalEncoder::GetAmplitudeAndStandardError(const std::vector<double> &samp
   *CHECK_NOTNULL(amplitude) = 0;
   *CHECK_NOTNULL(std_error) = 0;
   CHECK(!samples.empty());
-  // min_A 1/n * \Sigma_{i=0}^{n-1} (y_i - A * x_i)^2
-  // You can expand it to a quadratic function of A.
-  double a = 0, b = 0, c = 0;
-  for (int i = 0; i < (int) samples.size(); ++i) {
+  for (int i = 0; i < (int)samples.size(); ++i) {
     const double x_i = std::sin(2 * M_PI * frequency * (double) i / audio_sample_rate_);
     const double y_i = samples[i];
-    a += math::Sqr(x_i);
-    b += -2 * x_i * y_i;
-    c += math::Sqr(y_i);
+    *amplitude += std::abs(y_i);
+    if (x_i * y_i <= math::kEpsilon) {
+      *std_error += 1;
+    }
   }
-  if (std::abs(a) < math::kEpsilon) {
-    *amplitude = 0;
-    *std_error = std::sqrt(c / (double) samples.size());
-    return;
-  }
-  *amplitude = -b / (2 * a);
-  *std_error = std::sqrt(std::max(0.0, (a * math::Sqr(*amplitude) + b * (*amplitude) + c) / (double) samples.size()));
+  *amplitude *= M_PI_2 / (int)samples.size();
+  *std_error /= (int)samples.size();
 }
 
 } // encoder

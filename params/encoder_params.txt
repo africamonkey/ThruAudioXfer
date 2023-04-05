@@ -1,7 +1,7 @@
 trival_encoder_params: {
-  encoder_rate: 55
-  encode_frequency_for_bit_0: 220
-  encode_frequency_for_bit_1: 440
+  encoder_rate: 220
+  encode_frequency_for_bit_0: 880
+  encode_frequency_for_bit_1: 1760
   minimum_absolute_amplitude: 0.2
   maximum_standard_error: 0.1
 }
