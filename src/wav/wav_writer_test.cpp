@@ -12,38 +12,33 @@
 namespace wav {
 
 TEST(WavWriterTest, GenerateConstantFrequencyWavSingleChannel) {
-  const std::string temp_filename = "/tmp/constant_frequency.wav";
   interface::WavParams wav_params;
   ASSERT_TRUE(io::ReadFromProtoInTextFormat("params/wav_params.txt", &wav_params));
-  wav_params.set_num_channels(1);
-  WavWriter wav_writer(temp_filename, wav_params);
-  const int sample_count = wav_params.sample_rate() * 5; // 5 seconds of audio
-  const double frequency = 440.00;  // in Hz.
-  for (int i = 0; i < sample_count; ++i) {
-    const double t = 1.0 * i / wav_params.sample_rate();
-    const double sample_d = std::sin(t * 2.0 * M_PI * frequency);
-    wav_writer.AddSample(sample_d);
+  for (int num_channels = 1; num_channels <= 2; ++num_channels) {
+    for (int bit_depth = 16; bit_depth <= 32; bit_depth += 8) {
+      wav_params.set_num_channels(num_channels);
+      wav_params.set_bit_depth(bit_depth);
+      const std::string temp_filename =
+          std::string() + "/tmp/constant_frequency_" + std::to_string(wav_params.num_channels()) + "_"
+              + std::to_string(wav_params.bit_depth()) + ".wav";
+      WavWriter wav_writer(temp_filename, wav_params);
+      const int sample_count = wav_params.sample_rate() * 5; // 5 seconds of audio
+      const double frequency = 440.00;  // in Hz.
+      for (int i = 0; i < sample_count; ++i) {
+        const double t = 1.0 * i / wav_params.sample_rate();
+        if (num_channels == 1) {
+          const double sample_double = std::sin(t * 2.0 * M_PI * frequency);
+          wav_writer.AddSample(sample_double);
+        } else {
+          const double sample_double_0 = std::sin(t * 2.0 * M_PI * frequency);
+          const double sample_double_1 = std::cos(t * 2.0 * M_PI * frequency);
+          wav_writer.AddSample(sample_double_0, sample_double_1);
+        }
+      }
+      wav_writer.Write();
+      io::DeleteFileIfExists(temp_filename);
+    }
   }
-  wav_writer.Write();
-  io::DeleteFileIfExists(temp_filename);
-}
-
-TEST(WavWriterTest, GenerateConstantFrequencyWavDualChannel) {
-  const std::string temp_filename = "/tmp/constant_frequency.wav";
-  interface::WavParams wav_params;
-  ASSERT_TRUE(io::ReadFromProtoInTextFormat("params/wav_params.txt", &wav_params));
-  wav_params.set_num_channels(2);
-  WavWriter wav_writer(temp_filename, wav_params);
-  const int sample_count = wav_params.sample_rate() * 5; // 5 seconds of audio
-  const double frequency = 440.00;  // in Hz.
-  for (int i = 0; i < sample_count; ++i) {
-    const double t = 1.0 * i / wav_params.sample_rate();
-    const double sample_d_0 = std::sin(t * 2.0 * M_PI * frequency);
-    const double sample_d_1 = std::cos(t * 2.0 * M_PI * frequency);
-    wav_writer.AddSample(sample_d_0, sample_d_1);
-  }
-  wav_writer.Write();
-  io::DeleteFileIfExists(temp_filename);
 }
 
 TEST(WavWriterTest, GenerateScale) {
