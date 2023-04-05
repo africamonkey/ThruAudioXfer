@@ -4,8 +4,6 @@
 
 #include "src/encoder/encoder_base.h"
 
-#include <deque>
-
 namespace encoder {
 
 class TrivalEncoder final : EncoderBase {
@@ -18,7 +16,7 @@ class TrivalEncoder final : EncoderBase {
   void Decode(const std::function<bool(double *)> &get_next_audio_sample,
               const std::function<void(char)> &set_next_byte) const override;
 
-  void GetAmplitudeAndStandardError(const std::deque<double> &samples,
+  void GetAmplitudeAndStandardError(const std::vector<double> &samples,
                                     double frequency,
                                     double *amplitude,
                                     double *std_error) const;
