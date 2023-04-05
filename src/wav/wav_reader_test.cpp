@@ -50,6 +50,7 @@ TEST(WavReaderTest, ReadConstantFrequencyWav) {
         ASSERT_NEAR(sample_correct_1, sample_to_evaluate.second, max_error) << i;
       }
       ASSERT_TRUE(wav_reader.IsEof());
+      wav_reader.Close();
       io::DeleteFileIfExists(temp_filename);
     }
   }
