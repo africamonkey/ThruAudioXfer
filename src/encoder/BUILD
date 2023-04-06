@@ -27,8 +27,8 @@ cc_test(
     data = [
         "//params:encoder_params",
         "//params:wav_params",
-        "//src/encoder/test_data:encoded_and_resampled_audio",
-        "//src/encoder/test_data:encoded_and_resampled_audio_encoder_params",
+        "//src/encoder/test_data:easy",
+        "//src/encoder/test_data:medium",
     ],
     deps = [
         ":trival_encoder",

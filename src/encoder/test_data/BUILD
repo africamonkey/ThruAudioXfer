@@ -1,15 +1,17 @@
 package(default_visibility = ["//visibility:public"])
 
 filegroup(
-    name = "encoded_and_resampled_audio",
+    name = "easy",
     srcs = [
-        "encoded_and_resampled_audio.wav",
+        "easy.wav",
+        "easy_encoder_params.txt",
     ],
 )
 
 filegroup(
-    name = "encoded_and_resampled_audio_encoder_params",
+    name = "medium",
     srcs = [
-        "encoded_and_resampled_audio_encoder_params.txt",
+        "medium.wav",
+        "medium_encoder_params.txt",
     ],
 )

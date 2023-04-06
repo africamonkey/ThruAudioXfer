@@ -39,11 +39,36 @@ TEST(TrivalEncoderTest, Encode) {
   io::DeleteFileIfExists(temp_filename);
 }
 
-TEST(TrivalEncoderTest, DISABLED_Decode) {
+TEST(TrivalEncoderTest, DISABLED_DecodeEasy) {
   interface::EncoderParams encoder_params;
-  ASSERT_TRUE(io::ReadFromProtoInTextFormat("src/encoder/test_data/encoded_and_resampled_audio_encoder_params.txt",
+  ASSERT_TRUE(io::ReadFromProtoInTextFormat("src/encoder/test_data/easy_encoder_params.txt",
                                             &encoder_params));
-  wav::WavReader wav_reader("src/encoder/test_data/encoded_and_resampled_audio.wav");
+  wav::WavReader wav_reader("src/encoder/test_data/easy.wav");
+  encoder::TrivalEncoder trival_encoder(wav_reader.GetWavHeader().sample_rate, std::move(encoder_params));
+
+  // decode
+  std::function get_next_sample = [&wav_reader](double *sample) -> bool {
+    if (wav_reader.IsEof()) {
+      return false;
+    }
+    *CHECK_NOTNULL(sample) = wav_reader.GetSample().first;
+    return true;
+  };
+  std::string decoded_string;
+  std::function set_next_byte = [&decoded_string](char byte) {
+    decoded_string += byte;
+  };
+  trival_encoder.Decode(get_next_sample, set_next_byte);
+  wav_reader.Close();
+  const std::string kCorrectAnswer = "kQ";
+  EXPECT_EQ(decoded_string, kCorrectAnswer);
+}
+
+TEST(TrivalEncoderTest, DISABLED_DecodeMedium) {
+  interface::EncoderParams encoder_params;
+  ASSERT_TRUE(io::ReadFromProtoInTextFormat("src/encoder/test_data/medium_encoder_params.txt",
+                                            &encoder_params));
+  wav::WavReader wav_reader("src/encoder/test_data/medium.wav");
   encoder::TrivalEncoder trival_encoder(wav_reader.GetWavHeader().sample_rate, std::move(encoder_params));
 
   // decode
