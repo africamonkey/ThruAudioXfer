@@ -27,12 +27,15 @@ cc_test(
     data = [
         "//params:encoder_params",
         "//params:wav_params",
+        "//src/encoder/test_data:encoded_and_resampled_audio",
+        "//src/encoder/test_data:encoded_and_resampled_audio_encoder_params",
     ],
     deps = [
         ":trival_encoder",
         "//src/common/file:io",
         "//src/common/interface/proto:cc_wav_params_proto",
         "//src/common/testing:google_test_main",
+        "//src/wav:wav_reader",
         "//src/wav:wav_writer",
         "@com_google_glog//:glog",
     ],
