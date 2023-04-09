@@ -147,7 +147,7 @@ void TrivalEncoder::SampleWindow::PushBack(double sample) {
     }
   }
   samples_.push_back(sample);
-  while (samples_.size() > max_window_size_) {
+  while ((int) samples_.size() > max_window_size_) {
     PopFront();
   }
 }
