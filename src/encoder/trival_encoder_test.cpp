@@ -39,7 +39,7 @@ TEST(TrivalEncoderTest, Encode) {
   io::DeleteFileIfExists(temp_filename);
 }
 
-TEST(TrivalEncoderTest, DISABLED_DecodeEasy) {
+TEST(TrivalEncoderTest, DecodeEasy) {
   interface::EncoderParams encoder_params;
   ASSERT_TRUE(io::ReadFromProtoInTextFormat("src/encoder/test_data/easy_encoder_params.txt",
                                             &encoder_params));

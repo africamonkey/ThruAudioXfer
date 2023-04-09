@@ -18,6 +18,7 @@ TrivalEncoder::TrivalEncoder(int audio_sample_rate, interface::EncoderParams enc
   encoder_rate_ = encoder_params_.trival_encoder_params().encoder_rate();
   encode_frequency_for_bit_0_ = encoder_params_.trival_encoder_params().encode_frequency_for_bit_0();
   encode_frequency_for_bit_1_ = encoder_params_.trival_encoder_params().encode_frequency_for_bit_1();
+  encode_frequency_for_rest_ = encoder_params_.trival_encoder_params().encode_frequency_for_rest();
   minimum_absolute_amplitude_ = encoder_params_.trival_encoder_params().minimum_absolute_amplitude();
   maximum_standard_error_ = encoder_params_.trival_encoder_params().maximum_standard_error();
   CHECK_GT(audio_sample_rate_, encoder_rate_ * 2);
@@ -46,7 +47,8 @@ void TrivalEncoder::Encode(const std::function<bool(char *)> &get_next_byte,
       }
       ++current_bit_count;
       for (int sample = 0; sample < delta_count; ++sample) {
-        set_next_audio_sample(0.0);
+        double amplitude = std::sin(2 * M_PI * encode_frequency_for_rest_ * (double) sample / audio_sample_rate_);
+        set_next_audio_sample(amplitude);
       }
     }
   }

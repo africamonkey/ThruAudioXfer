@@ -25,6 +25,7 @@ class TrivalEncoder final : EncoderBase {
   double encoder_rate_ = 0.0;
   double encode_frequency_for_bit_0_ = 0.0;
   double encode_frequency_for_bit_1_ = 0.0;
+  double encode_frequency_for_rest_ = 0.0;
   double minimum_absolute_amplitude_ = 0.0;
   double maximum_standard_error_ = 0.0;
 };
