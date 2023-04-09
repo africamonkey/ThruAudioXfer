@@ -41,6 +41,7 @@ WavReader::WavReader(std::string filename) : filename_(std::move(filename)), inf
   }
   char next_header[4];
   int next_bytes = 0;
+  memset(next_header, 0, sizeof(next_header));
   while (!infile_.eof() && HeaderCharsToString(next_header) != "data") {
     std::vector<char> buffer(next_bytes);
     infile_.read(buffer.data(), next_bytes);
