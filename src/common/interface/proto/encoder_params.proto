@@ -7,7 +7,7 @@ message EncoderParams {
   optional TrivalEncoderParams trival_encoder_params = 1;
 }
 
-// Next id: 7
+// Next id: 8
 message TrivalEncoderParams {
   optional double encoder_rate = 1;
   optional double encode_frequency_for_bit_0 = 2;
@@ -15,4 +15,5 @@ message TrivalEncoderParams {
   optional double encode_frequency_for_rest = 4;
   optional double minimum_absolute_amplitude = 5;
   optional double maximum_standard_error = 6;
+  optional double maximum_standard_error_for_half_window = 7;
 }

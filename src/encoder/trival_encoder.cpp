@@ -21,6 +21,8 @@ TrivalEncoder::TrivalEncoder(int audio_sample_rate, interface::EncoderParams enc
   encode_frequency_for_rest_ = encoder_params_.trival_encoder_params().encode_frequency_for_rest();
   minimum_absolute_amplitude_ = encoder_params_.trival_encoder_params().minimum_absolute_amplitude();
   maximum_standard_error_ = encoder_params_.trival_encoder_params().maximum_standard_error();
+  maximum_standard_error_for_half_window_ =
+      encoder_params_.trival_encoder_params().maximum_standard_error_for_half_window();
   CHECK_GT(audio_sample_rate_, encoder_rate_ * 2);
 }
 
@@ -82,7 +84,7 @@ void TrivalEncoder::Decode(const std::function<bool(double *)> &get_next_audio_s
     if (std::abs(amplitude_in_window) < minimum_absolute_amplitude_) {
       continue;
     }
-    if (std_error_for_half_window > maximum_standard_error_) {
+    if (std_error_for_half_window > maximum_standard_error_for_half_window_) {
       continue;
     }
     if (std::min(std_error_for_bit_0, std_error_for_bit_1) > maximum_standard_error_) {

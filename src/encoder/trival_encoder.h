@@ -42,6 +42,7 @@ class TrivalEncoder final : EncoderBase {
   double encode_frequency_for_rest_ = 0.0;
   double minimum_absolute_amplitude_ = 0.0;
   double maximum_standard_error_ = 0.0;
+  double maximum_standard_error_for_half_window_ = 0.0;
 };
 
 } // encoder
