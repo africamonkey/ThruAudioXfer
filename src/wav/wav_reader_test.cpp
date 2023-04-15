@@ -46,8 +46,10 @@ TEST(WavReaderTest, ReadConstantFrequencyWav) {
         const double t = 1.0 * i / wav_params.sample_rate();
         const double sample_correct_0 = std::sin(t * 2.0 * M_PI * frequency);
         const double sample_correct_1 = num_channels == 1 ? sample_correct_0 : std::cos(t * 2.0 * M_PI * frequency);
-        ASSERT_NEAR(sample_correct_0, sample_to_evaluate.first, max_error) << i;
-        ASSERT_NEAR(sample_correct_1, sample_to_evaluate.second, max_error) << i;
+        ASSERT_NEAR(sample_correct_0, sample_to_evaluate.first, max_error)
+                      << "num_channels=" << num_channels << ", bit_depth=" << bit_depth << ", i=" << i << ", t=" << t;
+        ASSERT_NEAR(sample_correct_1, sample_to_evaluate.second, max_error)
+                      << "num_channels=" << num_channels << ", bit_depth=" << bit_depth << ", i=" << i << ", t=" << t;
       }
       ASSERT_TRUE(wav_reader.IsEof());
       wav_reader.Close();
