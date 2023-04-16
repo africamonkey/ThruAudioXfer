@@ -10,9 +10,13 @@ namespace wav {
 
 WavReader::WavReader(std::string filename) : filename_(std::move(filename)), infile_() {
   infile_.open(filename_, std::ios::binary | std::ios::in);
-  infile_.sync();
   CHECK(infile_.is_open()) << filename_;
   CHECK(!infile_.fail()) << filename_;
+
+  infile_.ignore(std::numeric_limits<std::streamsize>::max());
+  infile_size_ = infile_.gcount();
+  infile_.clear();   //  Since ignore will have set eof.
+  infile_.seekg(0, std::ios_base::beg);
 
   infile_.read(wav_header_.riff_header, 4);
   CHECK_EQ(infile_.gcount(), 4);
@@ -60,16 +64,14 @@ WavReader::WavReader(std::string filename) : filename_(std::move(filename)), inf
   CHECK_EQ(wav_header_.byte_rate, wav_header_.sample_rate * wav_header_.sample_alignment);
   if (wav_header_.fmt_chunk_size > 16) {
     int extra_size = wav_header_.fmt_chunk_size - 16;
-    std::vector<char> buffer(extra_size);
-    infile_.read(buffer.data(), extra_size);
+    infile_.ignore(extra_size);
     CHECK_EQ(infile_.gcount(), extra_size);
   }
   char next_header[4];
   int next_bytes = 0;
   memset(next_header, 0, sizeof(next_header));
   while (!infile_.eof() && HeaderCharsToString(next_header) != "data") {
-    std::vector<char> buffer(next_bytes);
-    infile_.read(buffer.data(), next_bytes);
+    infile_.ignore(next_bytes);
     CHECK_EQ(infile_.gcount(), next_bytes);
     infile_.read(next_header, 4);
     CHECK_EQ(infile_.gcount(), 4);
@@ -103,7 +105,8 @@ std::pair<double, double> WavReader::GetSample() {
   int sample_1 = 0;
   infile_.read((char *) &sample_0, wav_header_.bit_depth / 8);
   CHECK_EQ(infile_.gcount(), wav_header_.bit_depth / 8) << "eof=" << infile_.eof() << ", num_read_bytes="
-                                                        << num_read_bytes_ << ", data_bytes=" << wav_header_.data_bytes;
+                                                        << num_read_bytes_ << ", data_bytes=" << wav_header_.data_bytes
+                                                        << ", infile_size=" << infile_size_;
   num_read_bytes_ += wav_header_.bit_depth / 8;
   if (wav_header_.num_channels == 1) {
     sample_1 = sample_0;
@@ -111,7 +114,7 @@ std::pair<double, double> WavReader::GetSample() {
     infile_.read((char *) &sample_1, wav_header_.bit_depth / 8);
     CHECK_EQ(infile_.gcount(), wav_header_.bit_depth / 8) << "eof=" << infile_.eof() << ", num_read_bytes="
                                                           << num_read_bytes_ << ", data_bytes="
-                                                          << wav_header_.data_bytes;
+                                                          << wav_header_.data_bytes << ", infile_size=" << infile_size_;
     num_read_bytes_ += wav_header_.bit_depth / 8;
   }
   if (sample_0 > sample_max) {

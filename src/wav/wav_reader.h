@@ -26,6 +26,7 @@ class WavReader {
 
   std::string filename_;
   std::ifstream infile_;
+  std::streamsize infile_size_;
   WavHeader wav_header_;
   int num_read_bytes_;
 };
