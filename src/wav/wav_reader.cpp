@@ -12,25 +12,47 @@ WavReader::WavReader(std::string filename) : filename_(std::move(filename)), inf
   infile_.open(filename_, std::ios::binary | std::ios::in);
   CHECK(infile_.is_open()) << filename_;
   CHECK(!infile_.fail()) << filename_;
+
   infile_.read(wav_header_.riff_header, 4);
+  CHECK_EQ(infile_.gcount(), 4);
   CHECK_EQ(HeaderCharsToString(wav_header_.riff_header), "RIFF");
+
   infile_.read((char *) &wav_header_.wav_size, 4);
+  CHECK_EQ(infile_.gcount(), 4);
+
   infile_.read(wav_header_.wave_header, 4);
+  CHECK_EQ(infile_.gcount(), 4);
   CHECK_EQ(HeaderCharsToString(wav_header_.wave_header), "WAVE");
+
   infile_.read(wav_header_.fmt_header, 4);
+  CHECK_EQ(infile_.gcount(), 4);
   CHECK_EQ(HeaderCharsToString(wav_header_.fmt_header), "fmt ");
 
   infile_.read((char *) &wav_header_.fmt_chunk_size, 4);
+  CHECK_EQ(infile_.gcount(), 4);
   CHECK_GE(wav_header_.fmt_chunk_size, 16);
+
   infile_.read((char *) &wav_header_.audio_format, 2);
+  CHECK_EQ(infile_.gcount(), 2);
   CHECK_EQ(wav_header_.audio_format, 1) << "Only support PCM.";
+
   infile_.read((char *) &wav_header_.num_channels, 2);
+  CHECK_EQ(infile_.gcount(), 2);
   CHECK_GE(wav_header_.num_channels, 1) << "num_channels should be either 1 or 2.";
   CHECK_LE(wav_header_.num_channels, 2) << "num_channels should be either 1 or 2.";
+
   infile_.read((char *) &wav_header_.sample_rate, 4);
+  CHECK_EQ(infile_.gcount(), 4);
+
   infile_.read((char *) &wav_header_.byte_rate, 4);
+  CHECK_EQ(infile_.gcount(), 4);
+
   infile_.read((char *) &wav_header_.sample_alignment, 2);
+  CHECK_EQ(infile_.gcount(), 2);
+
   infile_.read((char *) &wav_header_.bit_depth, 2);
+  CHECK_EQ(infile_.gcount(), 2);
+
   CHECK(wav_header_.bit_depth == 16 || wav_header_.bit_depth == 24 || wav_header_.bit_depth == 32)
           << "bit_depth = " << wav_header_.bit_depth << " should be either 16, 24, or 32.";
   CHECK_EQ(wav_header_.sample_alignment, wav_header_.num_channels * (wav_header_.bit_depth / 8));
@@ -39,6 +61,7 @@ WavReader::WavReader(std::string filename) : filename_(std::move(filename)), inf
     int extra_size = wav_header_.fmt_chunk_size - 16;
     std::vector<char> buffer(extra_size);
     infile_.read(buffer.data(), extra_size);
+    CHECK_EQ(infile_.gcount(), extra_size);
   }
   char next_header[4];
   int next_bytes = 0;
@@ -46,8 +69,11 @@ WavReader::WavReader(std::string filename) : filename_(std::move(filename)), inf
   while (!infile_.eof() && HeaderCharsToString(next_header) != "data") {
     std::vector<char> buffer(next_bytes);
     infile_.read(buffer.data(), next_bytes);
+    CHECK_EQ(infile_.gcount(), next_bytes);
     infile_.read(next_header, 4);
+    CHECK_EQ(infile_.gcount(), 4);
     infile_.read((char*) &next_bytes, 4);
+    CHECK_EQ(infile_.gcount(), 4);
   }
   memcpy(wav_header_.data_header, next_header, 4);
   CHECK_EQ(HeaderCharsToString(wav_header_.data_header), "data");
@@ -75,11 +101,13 @@ std::pair<double, double> WavReader::GetSample() {
   int sample_0 = 0;
   int sample_1 = 0;
   infile_.read((char *) &sample_0, wav_header_.bit_depth / 8);
+  CHECK_EQ(infile_.gcount(), wav_header_.bit_depth / 8);
   num_read_bytes_ += wav_header_.bit_depth / 8;
   if (wav_header_.num_channels == 1) {
     sample_1 = sample_0;
   } else {
     infile_.read((char *) &sample_1, wav_header_.bit_depth / 8);
+    CHECK_EQ(infile_.gcount(), wav_header_.bit_depth / 8);
     num_read_bytes_ += wav_header_.bit_depth / 8;
   }
   if (sample_0 > sample_max) {
