@@ -2,6 +2,7 @@
 
 #include "wav_reader.h"
 
+#include <limits>
 #include <utility>
 
 #include "glog/logging.h"
