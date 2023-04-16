@@ -19,8 +19,9 @@ WavWriter::WavWriter(std::string filename, const interface::WavParams &wav_param
       sample_count_(0),
       is_finish_writing_(false) {
   // Open the output file for writing in binary mode
-  outfile_ = std::ofstream(filename_, std::ios::binary);
-  CHECK(!outfile_.fail());
+  outfile_.open(filename_, std::ios::binary | std::ios::out);
+  CHECK(outfile_.is_open()) << filename_;
+  CHECK(!outfile_.fail()) << filename_;
   wav_header_ = WavHeaderBuilder()
       .fmt_chunk_size(16)
       .audio_format(1)
@@ -71,6 +72,7 @@ void WavWriter::Write() {
     return;
   }
   // Close the file
+  outfile_.flush();
   outfile_.close();
 
   // Now that we know the size of the data chunk, update the header
@@ -78,11 +80,12 @@ void WavWriter::Write() {
   wav_header_ = WavHeaderBuilder(wav_header_).data_bytes(data_bytes).wav_header();
 
   // Open the file again and overwrite the header
-  outfile_.open(filename_.data(), std::ios::binary | std::ios::in | std::ios::out);
+  outfile_.open(filename_, std::ios::binary | std::ios::in | std::ios::out);
   outfile_.seekp(0);
   outfile_.write((char *) &wav_header_, sizeof(wav_header_));
 
   // Close the file again
+  outfile_.flush();
   outfile_.close();
   is_finish_writing_ = true;
 }

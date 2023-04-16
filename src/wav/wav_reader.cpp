@@ -9,8 +9,9 @@
 namespace wav {
 
 WavReader::WavReader(std::string filename) : filename_(std::move(filename)), infile_() {
-  infile_ = std::ifstream(filename_, std::ios::binary);
-  CHECK(!infile_.fail());
+  infile_.open(filename_, std::ios::binary | std::ios::in);
+  CHECK(infile_.is_open()) << filename_;
+  CHECK(!infile_.fail()) << filename_;
   infile_.read(wav_header_.riff_header, 4);
   CHECK_EQ(HeaderCharsToString(wav_header_.riff_header), "RIFF");
   infile_.read((char *) &wav_header_.wav_size, 4);
