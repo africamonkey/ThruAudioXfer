@@ -1,6 +1,6 @@
 # ThruAudioXfer
 
-[![unit-test](https://github.com/africamonkey/ThruAudioXfer/actions/workflows/unit-test.yml/badge.svg)](https://github.com/africamonkey/ThruAudioXfer/actions/workflows/unit-test.yml)
+[![unit-test](https://github.com/africamonkey/ThruAudioXfer/actions/workflows/unit-test.yml/badge.svg?branch=master)](https://github.com/africamonkey/ThruAudioXfer/actions/workflows/unit-test.yml)
 
 ThruAudioXfer (TAXf) is a protocol and application designed to let people download files through a speaker. It is a proof-of-concept created to demonstrate a long standing and poorly understood vulnerability in enterprise security.
 
