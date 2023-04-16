@@ -10,6 +10,7 @@ namespace wav {
 
 WavReader::WavReader(std::string filename) : filename_(std::move(filename)), infile_() {
   infile_.open(filename_, std::ios::binary | std::ios::in);
+  infile_.sync();
   CHECK(infile_.is_open()) << filename_;
   CHECK(!infile_.fail()) << filename_;
 
