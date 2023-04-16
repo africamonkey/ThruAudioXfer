@@ -53,6 +53,7 @@ TEST(WavReaderTest, ReadConstantFrequencyWav) {
         }
         if (last_wav_size != 0) {
           CHECK_EQ(last_wav_size, wav_size);
+          CHECK_EQ(last_wav_size, wav_size);
         }
         last_wav_size = wav_size;
       }
