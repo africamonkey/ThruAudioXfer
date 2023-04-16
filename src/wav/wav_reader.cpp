@@ -73,7 +73,7 @@ WavReader::WavReader(std::string filename) : filename_(std::move(filename)), inf
     CHECK_EQ(infile_.gcount(), next_bytes);
     infile_.read(next_header, 4);
     CHECK_EQ(infile_.gcount(), 4);
-    infile_.read((char*) &next_bytes, 4);
+    infile_.read((char *) &next_bytes, 4);
     CHECK_EQ(infile_.gcount(), 4);
   }
   memcpy(wav_header_.data_header, next_header, 4);
@@ -102,13 +102,16 @@ std::pair<double, double> WavReader::GetSample() {
   int sample_0 = 0;
   int sample_1 = 0;
   infile_.read((char *) &sample_0, wav_header_.bit_depth / 8);
-  CHECK_EQ(infile_.gcount(), wav_header_.bit_depth / 8);
+  CHECK_EQ(infile_.gcount(), wav_header_.bit_depth / 8) << "eof=" << infile_.eof() << ", num_read_bytes="
+                                                        << num_read_bytes_ << ", data_bytes=" << wav_header_.data_bytes;
   num_read_bytes_ += wav_header_.bit_depth / 8;
   if (wav_header_.num_channels == 1) {
     sample_1 = sample_0;
   } else {
     infile_.read((char *) &sample_1, wav_header_.bit_depth / 8);
-    CHECK_EQ(infile_.gcount(), wav_header_.bit_depth / 8);
+    CHECK_EQ(infile_.gcount(), wav_header_.bit_depth / 8) << "eof=" << infile_.eof() << ", num_read_bytes="
+                                                          << num_read_bytes_ << ", data_bytes="
+                                                          << wav_header_.data_bytes;
     num_read_bytes_ += wav_header_.bit_depth / 8;
   }
   if (sample_0 > sample_max) {
