@@ -42,7 +42,6 @@ TEST(WavReaderTest, ReadConstantFrequencyWav) {
       WavReader wav_reader(temp_filename);
       for (int i = 0; i < sample_count; ++i) {
         ASSERT_FALSE(wav_reader.IsEof());
-        ASSERT_FALSE(wav_reader.IsEof());
         const std::pair<double, double> sample_to_evaluate = wav_reader.GetSample();
         const double t = 1.0 * i / wav_params.sample_rate();
         const double sample_correct_0 = std::sin(t * 2.0 * M_PI * frequency);
