@@ -1,12 +1,18 @@
 // Copyright (c) 2023. Kaiqi Wang - All Rights Reserved
 
-#include "glog/logging.h"
-#include "gtest/gtest.h"
+#include <glog/logging.h>
 
-int main(int argc, char **argv) {
-  ::testing::InitGoogleTest(&argc, argv);
+void bar(int x) {
+  CHECK_EQ(x, 1);
+}
+
+void foo(int x) {
+  bar(x + 1);
+}
+
+int main(int argc, char** argv) {
   google::ParseCommandLineFlags(&argc, &argv, true);
   google::InitGoogleLogging(argv[0]);
   google::InstallFailureSignalHandler();
-  return RUN_ALL_TESTS();
+  foo(1);
 }
