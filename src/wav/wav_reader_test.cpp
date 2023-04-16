@@ -38,8 +38,6 @@ TEST(WavReaderTest, ReadConstantFrequencyWav) {
       }
       wav_writer.Write();
 
-      system((std::string() + "ls -l " + temp_filename).c_str());
-
       const double max_error = 1.0 / (double) (1ll << (wav_params.bit_depth() - 1));
       WavReader wav_reader(temp_filename);
       for (int i = 0; i < sample_count; ++i) {
