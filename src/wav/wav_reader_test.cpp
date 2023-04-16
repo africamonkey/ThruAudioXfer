@@ -38,6 +38,7 @@ TEST(WavReaderTest, ReadConstantFrequencyWav) {
       }
       wav_writer.Write();
 
+      // ensure the file's size is stable.
       size_t last_wav_size = 0;
       while (true) {
         constexpr int kBufferSize = 1500;
@@ -55,6 +56,7 @@ TEST(WavReaderTest, ReadConstantFrequencyWav) {
         }
         last_wav_size = wav_size;
       }
+      CHECK_GT(last_wav_size, 0);
 
       const double max_error = 1.0 / (double) (1ll << (wav_params.bit_depth() - 1));
       WavReader wav_reader(temp_filename);
