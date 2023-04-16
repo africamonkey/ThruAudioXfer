@@ -38,6 +38,27 @@ TEST(WavReaderTest, ReadConstantFrequencyWav) {
       }
       wav_writer.Write();
 
+      // ensure the file's size is stable.
+      size_t last_wav_size = 0;
+      while (true) {
+        constexpr int kBufferSize = 1500;
+        size_t wav_size = 0;
+        std::ifstream infile(temp_filename, std::ios::in | std::ios::binary);
+        std::vector<char> buffer(kBufferSize);
+        while (infile.read(buffer.data(), kBufferSize)) {
+          wav_size += infile.gcount();
+        }
+        if (wav_size == last_wav_size) {
+          break;
+        }
+        if (last_wav_size != 0) {
+          CHECK_EQ(last_wav_size, wav_size);
+          CHECK_EQ(last_wav_size, wav_size);
+        }
+        last_wav_size = wav_size;
+      }
+      CHECK_GT(last_wav_size, 0);
+
       const double max_error = 1.0 / (double) (1ll << (wav_params.bit_depth() - 1));
       WavReader wav_reader(temp_filename);
       for (int i = 0; i < sample_count; ++i) {
