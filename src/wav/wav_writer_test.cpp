@@ -14,12 +14,14 @@ namespace wav {
 TEST(WavWriterTest, GenerateConstantFrequencyWavSingleChannel) {
   interface::WavParams wav_params;
   ASSERT_TRUE(io::ReadFromProtoInTextFormat("params/wav_params.txt", &wav_params));
+  const std::string test_folder("/var/tmp/africamonkey");
+  io::CreateFolderRecursively(test_folder);
   for (int num_channels = 1; num_channels <= 2; ++num_channels) {
     for (int bit_depth = 16; bit_depth <= 32; bit_depth += 8) {
       wav_params.set_num_channels(num_channels);
       wav_params.set_bit_depth(bit_depth);
       const std::string temp_filename =
-          std::string() + "/tmp/constant_frequency_" + std::to_string(wav_params.num_channels()) + "_"
+          test_folder + "/constant_frequency_" + std::to_string(wav_params.num_channels()) + "_"
               + std::to_string(wav_params.bit_depth()) + ".wav";
       WavWriter wav_writer(temp_filename, wav_params);
       const int sample_count = wav_params.sample_rate() * 5; // 5 seconds of audio
@@ -75,7 +77,9 @@ TEST(WavWriterTest, GenerateScale) {
       Note(kFrequencyPause, 0.05),
       Note(kFrequencyPause, 2.0),
   };
-  const std::string temp_filename = "/tmp/scale.wav";
+  const std::string test_folder("/var/tmp/africamonkey");
+  io::CreateFolderRecursively(test_folder);
+  const std::string temp_filename = test_folder + "/scale.wav";
   interface::WavParams wav_params;
   ASSERT_TRUE(io::ReadFromProtoInTextFormat("params/wav_params.txt", &wav_params));
   WavWriter wav_writer(temp_filename, wav_params);
@@ -139,7 +143,9 @@ TEST(WavWriterTest, GenerateLittleStar) {
       Note(kFrequencyPause, 0.05),
       Note(kFrequencyPause, 2.0),
   };
-  const std::string temp_filename = "/tmp/little_star.wav";
+  const std::string test_folder("/var/tmp/africamonkey");
+  io::CreateFolderRecursively(test_folder);
+  const std::string temp_filename = test_folder + "/little_star.wav";
   interface::WavParams wav_params;
   ASSERT_TRUE(io::ReadFromProtoInTextFormat("params/wav_params.txt", &wav_params));
   WavWriter wav_writer(temp_filename, wav_params);

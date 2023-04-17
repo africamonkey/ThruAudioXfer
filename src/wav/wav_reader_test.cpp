@@ -15,12 +15,14 @@ namespace wav {
 TEST(WavReaderTest, ReadConstantFrequencyWav) {
   interface::WavParams wav_params;
   ASSERT_TRUE(io::ReadFromProtoInTextFormat("params/wav_params.txt", &wav_params));
+  const std::string test_folder("/var/tmp/africamonkey");
+  io::CreateFolderRecursively(test_folder);
   for (int num_channels = 1; num_channels <= 2; ++num_channels) {
     for (int bit_depth = 16; bit_depth <= 32; bit_depth += 8) {
       wav_params.set_num_channels(num_channels);
       wav_params.set_bit_depth(bit_depth);
       const std::string temp_filename =
-          std::string() + "constant_frequency_" + std::to_string(wav_params.num_channels()) + "_"
+          test_folder + "/constant_frequency_" + std::to_string(wav_params.num_channels()) + "_"
               + std::to_string(wav_params.bit_depth()) + ".wav";
       WavWriter wav_writer(temp_filename, wav_params);
       const int sample_count = wav_params.sample_rate() * 5; // 5 seconds of audio

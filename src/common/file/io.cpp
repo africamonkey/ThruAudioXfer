@@ -34,6 +34,10 @@ bool WriteToProtoInTextFormat(const google::protobuf::Message& proto,
   return true;
 }
 
+void CreateFolderRecursively(const std::string& path) {
+  std::filesystem::create_directories(path);
+}
+
 void DeleteFileIfExists(const std::string& file) {
   if (std::filesystem::exists(file)) {
     std::filesystem::remove(file);
