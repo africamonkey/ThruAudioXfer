@@ -23,12 +23,6 @@ jobs:
         path: "/home/runner/.cache/bazel"
         key: bazel
 
-    - name: Mount test folder
-      uses: actions/cache@v1
-      with:
-        path: $TEST_FOLDER
-        key: test_folder
-
     - name: Install bazelisk
       run: |
         curl -LO "https://github.com/bazelbuild/bazelisk/releases/download/v1.16.0/bazelisk-linux-amd64"
