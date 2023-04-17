@@ -30,17 +30,13 @@ jobs:
         mv bazelisk-linux-amd64 "${GITHUB_WORKSPACE}/bin/bazel"
         chmod +x "${GITHUB_WORKSPACE}/bin/bazel"
 
-    - name: Set Environment Variables
-      run: |
-        export TEST_FOLDER=$TEST_FOLDER
-
     - name: Build
       run: |
         "${GITHUB_WORKSPACE}/bin/bazel" build --disk_cache="/home/runner/.cache/bazel/fastbuild" //...
 
     - name: Test
       run: |
-        "${GITHUB_WORKSPACE}/bin/bazel" test --disk_cache="/home/runner/.cache/bazel/fastbuild" --test_output errors //...
+        "${GITHUB_WORKSPACE}/bin/bazel" test --disk_cache="/home/runner/.cache/bazel/fastbuild" --test_output errors //... --action_env=TEST_FOLDER=$TEST_FOLDER
 
     - name: ASAN Build
       run: |
@@ -48,4 +44,4 @@ jobs:
 
     - name: ASAN Test
       run: |
-        "${GITHUB_WORKSPACE}/bin/bazel" test --config=asan --disk_cache="/home/runner/.cache/bazel/asan" --test_output errors //...
+        "${GITHUB_WORKSPACE}/bin/bazel" test --config=asan --disk_cache="/home/runner/.cache/bazel/asan" --test_output errors //... --action_env=TEST_FOLDER=$TEST_FOLDER
