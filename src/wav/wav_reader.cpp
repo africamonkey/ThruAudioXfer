@@ -14,11 +14,6 @@ WavReader::WavReader(std::string filename) : filename_(std::move(filename)), inf
   CHECK(infile_.is_open()) << filename_;
   CHECK(!infile_.fail()) << filename_;
 
-  infile_.ignore(std::numeric_limits<std::streamsize>::max());
-  infile_size_ = infile_.gcount();
-  infile_.clear();   //  Since ignore will have set eof.
-  infile_.seekg(0, std::ios_base::beg);
-
   infile_.read(wav_header_.riff_header, 4);
   CHECK_EQ(infile_.gcount(), 4);
   CHECK_EQ(HeaderCharsToString(wav_header_.riff_header), "RIFF");
@@ -105,17 +100,13 @@ std::pair<double, double> WavReader::GetSample() {
   int sample_0 = 0;
   int sample_1 = 0;
   infile_.read((char *) &sample_0, wav_header_.bit_depth / 8);
-  CHECK_EQ(infile_.gcount(), wav_header_.bit_depth / 8) << "eof=" << infile_.eof() << ", num_read_bytes="
-                                                        << num_read_bytes_ << ", data_bytes=" << wav_header_.data_bytes
-                                                        << ", infile_size=" << infile_size_;
+  CHECK_EQ(infile_.gcount(), wav_header_.bit_depth / 8);
   num_read_bytes_ += wav_header_.bit_depth / 8;
   if (wav_header_.num_channels == 1) {
     sample_1 = sample_0;
   } else {
     infile_.read((char *) &sample_1, wav_header_.bit_depth / 8);
-    CHECK_EQ(infile_.gcount(), wav_header_.bit_depth / 8) << "eof=" << infile_.eof() << ", num_read_bytes="
-                                                          << num_read_bytes_ << ", data_bytes="
-                                                          << wav_header_.data_bytes << ", infile_size=" << infile_size_;
+    CHECK_EQ(infile_.gcount(), wav_header_.bit_depth / 8);
     num_read_bytes_ += wav_header_.bit_depth / 8;
   }
   if (sample_0 > sample_max) {
