@@ -30,6 +30,10 @@ jobs:
         mv bazelisk-linux-amd64 "${GITHUB_WORKSPACE}/bin/bazel"
         chmod +x "${GITHUB_WORKSPACE}/bin/bazel"
 
+    - name: Set Environment Variables
+      run: |
+        export TEST_FOLDER=$TEST_FOLDER
+
     - name: Build
       run: |
         "${GITHUB_WORKSPACE}/bin/bazel" build --disk_cache="/home/runner/.cache/bazel/fastbuild" //...
