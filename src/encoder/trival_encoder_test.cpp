@@ -29,9 +29,7 @@ TEST(TrivalEncoderTest, Encode) {
     *CHECK_NOTNULL(byte) = kStringToBeEncoded[encode_current_id++];
     return true;
   };
-  const std::string test_folder("/var/tmp/africamonkey");
-  io::CreateFolderRecursively(test_folder);
-  const std::string temp_filename = test_folder + "/trival_encoded.wav";
+  const std::string temp_filename = io::GenerateTestFolder() + "/trival_encoded.wav";
   wav::WavWriter wav_writer(temp_filename, wav_params);
   std::function set_next_sample = [&wav_writer](double sample) {
     wav_writer.AddSample(sample);

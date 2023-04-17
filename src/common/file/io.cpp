@@ -34,6 +34,16 @@ bool WriteToProtoInTextFormat(const google::protobuf::Message& proto,
   return true;
 }
 
+std::string GenerateTestFolder() {
+  std::string default_test_folder = "/var/tmp/africamonkey";
+  const char* test_folder_p = std::getenv("TEST_FOLDER");
+  if (test_folder_p != nullptr) {
+    default_test_folder = test_folder_p;
+  }
+  CreateFolderRecursively(default_test_folder);
+  return default_test_folder;
+}
+
 void CreateFolderRecursively(const std::string& path) {
   std::filesystem::create_directories(path);
 }

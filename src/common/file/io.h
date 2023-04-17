@@ -18,6 +18,8 @@ MUST_USE_RESULT bool ReadFromProtoInTextFormat(const std::string &text_file,
 MUST_USE_RESULT bool WriteToProtoInTextFormat(const google::protobuf::Message &proto,
                                               const std::string &text_file);
 
+std::string GenerateTestFolder();
+
 void CreateFolderRecursively(const std::string& path);
 
 void DeleteFileIfExists(const std::string& file);

@@ -10,8 +10,9 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
+    env:
+      TEST_FOLDER: /home/runner/tmp/africamonkey
 
     steps:  
     - uses: actions/checkout@v1
