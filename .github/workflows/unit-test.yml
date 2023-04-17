@@ -32,7 +32,7 @@ jobs:
 
     - name: Build
       run: |
-        "${GITHUB_WORKSPACE}/bin/bazel" build --disk_cache="/home/runner/.cache/bazel/fastbuild" //...
+        "${GITHUB_WORKSPACE}/bin/bazel" build --disk_cache="/home/runner/.cache/bazel/fastbuild" //... --action_env=TEST_FOLDER=$TEST_FOLDER
 
     - name: Test
       run: |
@@ -40,7 +40,7 @@ jobs:
 
     - name: ASAN Build
       run: |
-        "${GITHUB_WORKSPACE}/bin/bazel" build --config=asan --disk_cache="/home/runner/.cache/bazel/asan" //...
+        "${GITHUB_WORKSPACE}/bin/bazel" build --config=asan --disk_cache="/home/runner/.cache/bazel/asan" //... --action_env=TEST_FOLDER=$TEST_FOLDER
 
     - name: ASAN Test
       run: |
