@@ -20,7 +20,7 @@ TEST(WavReaderTest, ReadConstantFrequencyWav) {
       wav_params.set_num_channels(num_channels);
       wav_params.set_bit_depth(bit_depth);
       const std::string temp_filename =
-          std::string() + "/tmp/constant_frequency_" + std::to_string(wav_params.num_channels()) + "_"
+          std::string() + "constant_frequency_" + std::to_string(wav_params.num_channels()) + "_"
               + std::to_string(wav_params.bit_depth()) + ".wav";
       WavWriter wav_writer(temp_filename, wav_params);
       const int sample_count = wav_params.sample_rate() * 5; // 5 seconds of audio
