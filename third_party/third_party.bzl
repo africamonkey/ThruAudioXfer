@@ -42,14 +42,3 @@ def third_party_repositories():
             "https://github.com/bazelbuild/rules_proto/archive/refs/tags/5.3.0-21.7.tar.gz",
         ],
     )
-
-    http_archive(
-        name = "com_github_playsound",
-        sha256 = "a830c77ad613e0580642d677453a9bc6924a06d5d9447a5ab676ff3621f5d9ee",
-        strip_prefix = "playsound-1.3.0",
-        build_file = "//third_party:playsound.BUILD",
-        patches = ["//third_party:playsound.patch"],
-        urls = [
-            "https://github.com/TaylorSMarks/playsound/archive/refs/tags/v1.3.0.tar.gz",
-        ],
-    )
