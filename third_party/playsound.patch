@@ -1,0 +1,28 @@
+diff --git playsound.py playsound.py
+index 84a7f7a..1e8c5bf 100644
+--- playsound.py
++++ playsound.py
+@@ -235,23 +235,8 @@ if system == 'Windows':
+     playsound = _playsoundWin
+ elif system == 'Darwin':
+     playsound = _playsoundOSX
+-    import sys
+-    if sys.version_info[0] > 2:
+-        try:
+-            from AppKit import NSSound
+-        except ImportError:
+-            logger.warning("playsound is relying on a python 2 subprocess. Please use `pip3 install PyObjC` if you want playsound to run more efficiently.")
+-            playsound = lambda sound, block = True: _playsoundAnotherPython('/System/Library/Frameworks/Python.framework/Versions/2.7/bin/python', sound, block, macOS = True)
+ else:
+     playsound = _playsoundNix
+-    if __name__ != '__main__':  # Ensure we don't infinitely recurse trying to get another python instance.
+-        try:
+-            import gi
+-            gi.require_version('Gst', '1.0')
+-            from gi.repository import Gst
+-        except:
+-            logger.warning("playsound is relying on another python subprocess. Please use `pip install pygobject` if you want playsound to run more efficiently.")
+-            playsound = lambda sound, block = True: _playsoundAnotherPython('/usr/bin/python3', sound, block, macOS = False)
+ 
+ del system
+ 
