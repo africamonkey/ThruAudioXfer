@@ -56,14 +56,3 @@ cc_test(
         "//src/common/testing:google_test_main",
     ],
 )
-
-py_binary(
-    name = "wav_player_main",
-    srcs = ["wav_player_main.py"],
-    data = [
-        "//src/encoder/test_data:easy",
-    ],
-    deps = [
-        "@com_github_pydub//:pydub",
-    ],
-)

@@ -42,13 +42,3 @@ def third_party_repositories():
             "https://github.com/bazelbuild/rules_proto/archive/refs/tags/5.3.0-21.7.tar.gz",
         ],
     )
-
-    http_archive(
-        name = "com_github_pydub",
-        sha256 = "94f423c9acc9f361203e82a204420bb8fb85731d0586ebd2c1509fbeadeabad6",
-        build_file = "//third_party:pydub.BUILD",
-        strip_prefix = "pydub-0.25.1",
-        urls = [
-            "https://github.com/jiaaro/pydub/archive/refs/tags/v0.25.1.tar.gz",
-        ],
-    )
